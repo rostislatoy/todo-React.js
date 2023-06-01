@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/control-has-associated-label */
@@ -8,7 +9,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-useless-constructor */
 import React, { Component } from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { formatDistanceToNow } from 'date-fns';
 import EditState from './EditTaskInput';
 
