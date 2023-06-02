@@ -10,8 +10,9 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-useless-constructor */
 import React, { Component } from 'react';
-import { formatDistanceToNow } from 'date-fns';
+import classNames from 'classnames';
 import EditState from './EditTaskInput';
+import createdDataHelper from './TaskListDataHelper';
 
 export default class Task extends Component {
   constructor() {
@@ -29,17 +30,14 @@ export default class Task extends Component {
       edit,
       createdDate,
     } = this.props;
-    const createdAgo = formatDistanceToNow(new Date(createdDate), {
-      addSuffix: true,
-      includeSeconds: true,
-    });
-    const timelnSeconds = Math.round(
-      (new Date() - new Date(createdDate)) / 1000
-    );
-    const showSeconds = timelnSeconds < 60;
 
+    const classNameState = classNames({
+      completed: done,
+      editing: edit,
+      view: !done && !edit,
+    });
     return (
-      <li className={done ? 'completed' : edit ? 'editing' : 'view'}>
+      <li className={classNameState}>
         <div className="view">
           <input
             onClick={onToggleDone}
@@ -51,9 +49,7 @@ export default class Task extends Component {
           <label onClick={onToggleDone}>
             <span className="description">{name}</span>
             <span className="created">
-              created
-              <br />
-              {showSeconds ? `${timelnSeconds} seconds ago` : createdAgo}
+              created - {createdDataHelper(createdDate)}
             </span>
           </label>
           <button className="icon icon-edit" onClick={onToggleEdit} />

@@ -407,10 +407,9 @@ html .clear-completed:active {
   }
 }
 
-.no-todos{
+.no-todos {
   font-size: 23px;
   text-align: center;
   color: gray;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-
 }

@@ -2,7 +2,7 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
 import PropTypes from 'prop-types';
-import filterState from '../constants/filter';
+import filterState from '../../constants/filter';
 
 function TaskFilter(props) {
   const filterStage = props.filter;

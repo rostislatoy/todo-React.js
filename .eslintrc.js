@@ -6,6 +6,7 @@ module.exports = {
   plugins: ['prettier'],
   rules: {
     'no-console': 1,
+    'no-plusplus': 'off',
     'import/no-unresolved': [0, { commonjs: true, amd: true }],
     'import/named': 0,
     'import/no-named-as-default': 0,

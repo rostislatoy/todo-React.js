@@ -22,7 +22,7 @@ class InputComponent extends Component {
   }
 
   handleChange(event) {
-    this.setState({ inputValue: event.target.value });
+    if (event.target.value) this.setState({ inputValue: event.target.value });
   }
 
   render() {

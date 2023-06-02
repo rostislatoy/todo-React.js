@@ -3,7 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Task from './Task';
-import filterState from '../constants/filter';
+import filterState from '../../constants/filter';
 
 function TaskList({
   todos,

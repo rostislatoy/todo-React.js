@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import TaskList from '../pages/TaskList';
-import Header from '../pages/Header';
-import Footer from '../pages/Footer';
+import TaskList from '../pages/TaskList/TaskList';
+import Header from '../pages/Header/Header';
+import Footer from '../pages/Footer/Footer';
 import filterState from '../constants/filter';
 
 export default class App extends Component {
@@ -11,7 +11,7 @@ export default class App extends Component {
       todos: [],
       filter: filterState.All,
     };
-    this.defaultId = 100;
+    this.defaultId = 200;
     this.onToggleEdit = this.onToggleEdit.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.onToggleDone = this.onToggleDone.bind(this);
@@ -83,9 +83,9 @@ export default class App extends Component {
   getFilteredTasks() {
     const { todos, filter } = this.state;
     switch (filter) {
-      case 'Active':
+      case filterState.Active:
         return todos.filter((task) => !task.done);
-      case 'Completed':
+      case filterState.Completed:
         return todos.filter((task) => task.done);
       default:
         return todos;
@@ -99,7 +99,6 @@ export default class App extends Component {
       createdDate: new Date(),
       edit: false,
       status: 'view',
-      // eslint-disable-next-line no-plusplus
       id: this.defaultId++,
     };
   }
