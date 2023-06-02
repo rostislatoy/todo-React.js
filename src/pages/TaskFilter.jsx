@@ -2,6 +2,7 @@
 /* eslint-disable react/button-has-type */
 import React from 'react';
 import PropTypes from 'prop-types';
+import filterState from '../constants/filter';
 
 function TaskFilter(props) {
   const filterStage = props.filter;
@@ -9,24 +10,24 @@ function TaskFilter(props) {
     <ul className="filters">
       <li>
         <button
-          onClick={() => props.handleChange('All')}
-          className={filterStage === 'All' ? 'selected' : ''}
+          onClick={() => props.handleChange(filterState.All)}
+          className={filterStage === filterState.All ? 'selected' : ''}
         >
           All
         </button>
       </li>
       <li>
         <button
-          onClick={() => props.handleChange('Active')}
-          className={filterStage === 'Active' ? 'selected' : ''}
+          onClick={() => props.handleChange(filterState.Active)}
+          className={filterStage === filterState.Active ? 'selected' : ''}
         >
           Active
         </button>
       </li>
       <li>
         <button
-          onClick={() => props.handleChange('Completed')}
-          className={filterStage === 'Completed' ? 'selected' : ''}
+          onClick={() => props.handleChange(filterState.Completed)}
+          className={filterStage === filterState.Completed ? 'selected' : ''}
         >
           Completed{' '}
         </button>
@@ -38,7 +39,7 @@ function TaskFilter(props) {
 TaskFilter.defaultProps = {
   // eslint-disable-next-line react/default-props-match-prop-types
   handleChange: () => {},
-  filter: 'All',
+  filter: filterState.All,
 };
 
 TaskFilter.propTypes = {

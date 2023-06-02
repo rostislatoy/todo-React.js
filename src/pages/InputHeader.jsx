@@ -13,9 +13,10 @@ class InputComponent extends Component {
 
   handleKeyDown(event) {
     const { onSave } = this.props;
-    if (event.keyCode === 13) {
+    const { inputValue } = this.state;
+    if (event.keyCode === 13 && inputValue.trim() !== '') {
       // eslint-disable-next-line react/destructuring-assignment
-      onSave(this.state.inputValue);
+      onSave(inputValue);
       this.setState({ inputValue: '' });
     }
   }

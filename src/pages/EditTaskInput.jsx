@@ -16,15 +16,16 @@ export default class EditState extends Component {
     const { inputValue } = this.state;
     // eslint-disable-next-line react/prop-types
     const { onUpdate } = this.props;
-    const { taskId, name } = this.props.props;
+    const { taskId } = this.props.props;
     if (event.keyCode === 13) {
-      onUpdate(inputValue, taskId);
-      this.setState({ inputValue: name });
+      const newValue = inputValue;
+      onUpdate(newValue, taskId);
+      this.setState({ inputValue: '' });
     }
   }
 
   handleChange(event) {
-    this.setState({ inputValue: event.target.value });
+    if (event.target.value) this.setState({ inputValue: event.target.value });
   }
 
   render() {

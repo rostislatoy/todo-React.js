@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import TaskList from './TaskList';
-import Header from './Header';
-import Footer from './Footer';
+import TaskList from '../pages/TaskList';
+import Header from '../pages/Header';
+import Footer from '../pages/Footer';
+import filterState from '../constants/filter';
 
 export default class App extends Component {
   constructor() {
     super();
     this.state = {
-      emulateTasks: [],
-      filter: 'All',
+      todos: [],
+      filter: filterState.All,
     };
     this.defaultId = 100;
     this.onToggleEdit = this.onToggleEdit.bind(this);
@@ -22,60 +23,72 @@ export default class App extends Component {
     this.updateItem = this.updateItem.bind(this);
   }
 
-  handleFilterChange(filterChanged) {
-    this.setState({ filter: filterChanged });
+  componentDidMount() {
+    const storageTodos = JSON.parse(localStorage.getItem('todos'));
+    if (storageTodos) {
+      this.setState({ todos: storageTodos });
+    }
+  }
+
+  componentDidUpdate() {
+    const { todos } = this.state;
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }
+
+  handleFilterChange(newFilterValue) {
+    this.setState({ filter: newFilterValue });
   }
 
   onToggleDone(id) {
-    this.setState(({ emulateTasks }) => {
-      const idx = emulateTasks.findIndex((el) => el.id === id);
+    this.setState(({ todos }) => {
+      const idx = todos.findIndex((el) => el.id === id);
 
-      const oldItem = emulateTasks[idx];
+      const oldItem = todos[idx];
       const newItem = {
         ...oldItem,
         done: !oldItem.done,
       };
       const newArray = [
-        ...emulateTasks.slice(0, idx),
+        ...todos.slice(0, idx),
         newItem,
-        ...emulateTasks.slice(idx + 1),
+        ...todos.slice(idx + 1),
       ];
 
       return {
-        emulateTasks: newArray,
+        todos: newArray,
       };
     });
   }
 
   onToggleEdit(id) {
-    this.setState(({ emulateTasks }) => {
-      const idx = emulateTasks.findIndex((el) => el.id === id);
-      const oldItem = emulateTasks[idx];
+    this.setState(({ todos }) => {
+      const idx = todos.findIndex((el) => el.id === id);
+      const oldItem = todos[idx];
       const newItem = {
         ...oldItem,
         edit: !oldItem.edit,
       };
       const newArray = [
-        ...emulateTasks.slice(0, idx),
+        ...todos.slice(0, idx),
         newItem,
-        ...emulateTasks.slice(idx + 1),
+        ...todos.slice(idx + 1),
       ];
 
       return {
-        emulateTasks: newArray,
+        todos: newArray,
       };
     });
   }
 
   getFilteredTasks() {
-    const { emulateTasks, filter } = this.state;
+    const { todos, filter } = this.state;
     switch (filter) {
       case 'Active':
-        return emulateTasks.filter((task) => !task.done);
+        return todos.filter((task) => !task.done);
       case 'Completed':
-        return emulateTasks.filter((task) => task.done);
+        return todos.filter((task) => task.done);
       default:
-        return emulateTasks;
+        return todos;
     }
   }
 
@@ -92,65 +105,62 @@ export default class App extends Component {
   }
 
   clearCompletedTasks() {
-    this.setState(({ emulateTasks }) => {
-      const newArray = emulateTasks.filter((el) => !el.done);
+    this.setState(({ todos }) => {
+      const newArray = todos.filter((el) => !el.done);
       return {
-        emulateTasks: newArray,
+        todos: newArray,
       };
     });
   }
 
   deleteItem(id) {
-    this.setState(({ emulateTasks }) => {
-      const idx = emulateTasks.findIndex((el) => el.id === id);
-      const newArr = [
-        ...emulateTasks.slice(0, idx),
-        ...emulateTasks.slice(idx + 1),
-      ];
+    this.setState(({ todos }) => {
+      const idx = todos.findIndex((el) => el.id === id);
+      const newArr = todos.filter((el, index) => index !== idx);
       return {
-        emulateTasks: newArr,
+        todos: newArr,
       };
     });
   }
 
   saveItem(text) {
-    this.setState(({ emulateTasks }) => {
+    this.setState(({ todos }) => {
       const newTask = this.createItem(text);
-      const newArr = [...emulateTasks, newTask];
+      const newArr = [...todos, newTask];
       return {
-        emulateTasks: newArr,
+        todos: newArr,
       };
     });
   }
 
   updateItem(text, id) {
-    this.setState(({ emulateTasks }) => {
-      const idx = emulateTasks.findIndex((el) => el.id === id);
-      const oldItem = emulateTasks[idx];
+    this.setState(({ todos }) => {
+      const idx = todos.findIndex((el) => el.id === id);
+      const oldItem = todos[idx];
       const newItem = {
         ...oldItem,
         edit: !oldItem.edit,
         name: text,
       };
       const newArray = [
-        ...emulateTasks.slice(0, idx),
+        ...todos.slice(0, idx),
         newItem,
-        ...emulateTasks.slice(idx + 1),
+        ...todos.slice(idx + 1),
       ];
 
       return {
-        emulateTasks: newArray,
+        todos: newArray,
       };
     });
   }
 
   render() {
-    const { emulateTasks, filter } = this.state;
-    const getDoneTasks = emulateTasks.filter((el) => !el.done).length;
+    const { todos, filter } = this.state;
+    const getDoneTasks = todos.filter((el) => !el.done).length;
 
     return (
       <section className="todoapp">
-        <Header todos={emulateTasks} onSave={this.saveItem} />
+        <Header todos={todos} onSave={this.saveItem} />
         <section className="main">
           <TaskList
             todos={this.getFilteredTasks()}
@@ -158,6 +168,7 @@ export default class App extends Component {
             onToggleDone={this.onToggleDone}
             onToggleEdit={this.onToggleEdit}
             onUpdate={this.updateItem}
+            filter={filter}
           />
         </section>
         <Footer

@@ -1,11 +1,20 @@
+/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable no-else-return */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Task from './Task';
+import filterState from '../constants/filter';
 
-function TaskList({ todos, onDeleted, onToggleDone, onToggleEdit, onUpdate }) {
+function TaskList({
+  todos,
+  onDeleted,
+  onToggleDone,
+  onToggleEdit,
+  onUpdate,
+  filter,
+}) {
   const elements = todos.map((el) => {
     const { id, ...elProps } = el;
-
     return (
       <Task
         key={id}
@@ -20,8 +29,21 @@ function TaskList({ todos, onDeleted, onToggleDone, onToggleEdit, onUpdate }) {
       />
     );
   });
-
-  return <ul className="todo-list">{elements}</ul>;
+  if (elements.length) {
+    // console.log(elements);
+    return <ul className="todo-list">{elements}</ul>;
+  } else {
+    switch (filter) {
+      case filterState.Active:
+        return <p className="no-todos">You have completed all the tasks</p>;
+      case filterState.Completed:
+        return (
+          <p className="no-todos">There are no completed todos here yet</p>
+        );
+      default:
+        return <p className="no-todos">There's no todos yet :(</p>;
+    }
+  }
 }
 
 TaskList.defaultProps = {
@@ -30,6 +52,7 @@ TaskList.defaultProps = {
   onToggleDone: () => {},
   onToggleEdit: () => {},
   onUpdate: () => {},
+  filter: '',
 };
 
 TaskList.propTypes = {
@@ -39,6 +62,7 @@ TaskList.propTypes = {
   onToggleDone: PropTypes.func,
   onToggleEdit: PropTypes.func,
   onUpdate: PropTypes.func,
+  filter: PropTypes.string,
 };
 
 export default TaskList;

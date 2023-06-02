@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable react/button-has-type */
@@ -41,9 +42,10 @@ export default class Task extends Component {
       <li className={done ? 'completed' : edit ? 'editing' : 'view'}>
         <div className="view">
           <input
+            onClick={onToggleDone}
             className="toggle"
             type="checkbox"
-            checked={!!done}
+            checked={done ? true : false}
             onChange={() => {}}
           />
           <label onClick={onToggleDone}>
