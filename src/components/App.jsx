@@ -25,14 +25,17 @@ export default class App extends Component {
 
   componentDidMount() {
     const storageTodos = JSON.parse(localStorage.getItem('todos'));
-    if (storageTodos) {
+    const storageFilter = localStorage.getItem('filter');
+    if (storageTodos && storageFilter) {
       this.setState({ todos: storageTodos });
+      this.setState({ filter: storageFilter });
     }
   }
 
   componentDidUpdate() {
-    const { todos } = this.state;
+    const { todos, filter } = this.state;
     localStorage.setItem('todos', JSON.stringify(todos));
+    localStorage.setItem('filter', filter);
   }
 
   handleFilterChange(newFilterValue) {
