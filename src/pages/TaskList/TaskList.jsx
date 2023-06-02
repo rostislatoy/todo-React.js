@@ -30,7 +30,6 @@ function TaskList({
     );
   });
   if (elements.length) {
-    // console.log(elements);
     return <ul className="todo-list">{elements}</ul>;
   } else {
     switch (filter) {
