@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
 
 export default class EditState extends Component {
   constructor() {
@@ -41,7 +40,3 @@ export default class EditState extends Component {
     );
   }
 }
-// EditState.propTypes = {
-//   name: PropTypes.string.isReq,
-//   onUpdate: PropTypes.func.isRequired,
-// };
