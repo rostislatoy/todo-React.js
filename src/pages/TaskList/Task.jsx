@@ -1,3 +1,6 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable no-unneeded-ternary */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/prefer-stateless-function */
@@ -12,6 +15,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import EditState from './EditTaskInput';
+import TaskTimer from './TaskTimer';
 import createdDataHelper from './TaskListDataHelper';
 
 export default class Task extends Component {
@@ -29,6 +33,9 @@ export default class Task extends Component {
       done,
       edit,
       createdDate,
+      timer,
+      taskId,
+      timerUpdate,
     } = this.props;
 
     const classNameState = classNames({
@@ -46,9 +53,18 @@ export default class Task extends Component {
             checked={done ? true : false}
             onChange={() => {}}
           />
-          <label onClick={onToggleDone}>
-            <span className="description">{name}</span>
-            <span className="created">
+          <label>
+            <span onClick={onToggleDone} className="title">
+              {name}
+            </span>
+            <TaskTimer
+              time={timer}
+              taskId={taskId}
+              name={name}
+              done={done}
+              timerUpdate={timerUpdate}
+            />
+            <span className="description">
               created - {createdDataHelper(createdDate)}
             </span>
           </label>

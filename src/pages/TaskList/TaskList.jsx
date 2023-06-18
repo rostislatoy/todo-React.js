@@ -12,6 +12,7 @@ function TaskList({
   onToggleEdit,
   onUpdate,
   filter,
+  timerUpdate,
 }) {
   const elements = todos.map((el) => {
     const { id, ...elProps } = el;
@@ -26,6 +27,8 @@ function TaskList({
         onToggleEdit={() => onToggleEdit(id)}
         onUpdate={onUpdate}
         taskId={id}
+        filter={filter}
+        timerUpdate={timerUpdate}
       />
     );
   });
@@ -51,6 +54,7 @@ TaskList.defaultProps = {
   onToggleDone: () => {},
   onToggleEdit: () => {},
   onUpdate: () => {},
+  timerUpdate: () => {},
   filter: '',
 };
 
@@ -62,6 +66,7 @@ TaskList.propTypes = {
   onToggleEdit: PropTypes.func,
   onUpdate: PropTypes.func,
   filter: PropTypes.string,
+  timerUpdate: PropTypes.func,
 };
 
 export default TaskList;

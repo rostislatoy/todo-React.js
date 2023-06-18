@@ -16,6 +16,7 @@ export default class EditState extends Component {
     const { inputValue } = this.state;
     // eslint-disable-next-line react/prop-types
     const { onUpdate } = this.props;
+    console.log(onUpdate);
     const { taskId } = this.props.props;
     if (event.keyCode === 13) {
       const newValue = inputValue;
