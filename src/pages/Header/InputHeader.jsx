@@ -10,7 +10,6 @@
 /* eslint-disable react/prop-types */
 import React, { Component } from 'react';
 
-
 class InputComponent extends Component {
   constructor() {
     super();
@@ -31,10 +30,10 @@ class InputComponent extends Component {
     const { onSave } = this.props;
     const { inputValue, minValue, secValue } = this.state;
     if (event.keyCode === 13 && inputValue.trim() !== '') {
-      if((parseInt(minValue) &&  parseInt(secValue)) !== isNaN){
+      if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
         onSave(inputValue, `${minValue}:${secValue}`);
         this.setState({ inputValue: '', secValue: '', minValue: '' });
-      }else{
+      } else {
         onSave(inputValue, 0);
         this.setState({ inputValue: '', secValue: '', minValue: '' });
       }
@@ -45,10 +44,10 @@ class InputComponent extends Component {
     const { onSave } = this.props;
     const { inputValue, minValue, secValue } = this.state;
     if (event.keyCode === 13 && inputValue.trim() !== '') {
-      if((parseInt(minValue) &&  parseInt(secValue)) !== isNaN){
+      if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
         onSave(inputValue, `${minValue}:${secValue}`);
         this.setState({ inputValue: '', secValue: '', minValue: '' });
-      }else{
+      } else {
         onSave(inputValue, 0);
         this.setState({ inputValue: '', secValue: '', minValue: '' });
       }
@@ -59,10 +58,10 @@ class InputComponent extends Component {
     const { onSave } = this.props;
     const { inputValue, minValue, secValue } = this.state;
     if (event.keyCode === 13 && inputValue.trim() !== '') {
-      if((parseInt(minValue) &&  parseInt(secValue)) !== isNaN){
+      if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
         onSave(inputValue, `${minValue}:${secValue}`);
         this.setState({ inputValue: '', secValue: '', minValue: '' });
-      }else{
+      } else {
         onSave(inputValue, 0);
         this.setState({ inputValue: '', secValue: '', minValue: '' });
       }
@@ -113,6 +112,5 @@ class InputComponent extends Component {
     );
   }
 }
-
 
 export default InputComponent;
