@@ -36,7 +36,6 @@ class TaskTimer extends React.Component {
       this.state.timerRunning &&
       !this.state.shouldStopTimer
     ) {
-      console.log('changed');
       this.setState({ shouldStopTimer: true });
     } else if (this.state.shouldStopTimer) {
       this.stopTimer();
