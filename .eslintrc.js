@@ -16,6 +16,13 @@ module.exports = {
     'import/export': 0,
     'prettier/prettier': 'error',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
+    'prefer-destructuring': [
+      'off',
+      {
+        array: false,
+        object: false,
+      },
+    ],
   },
 
   parserOptions: {

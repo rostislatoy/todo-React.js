@@ -8,6 +8,9 @@
 /* eslint-disable react/no-unused-state */
 /* eslint-disable jsx-a11y/no-autofocus */
 /* eslint-disable react/prop-types */
+/* eslint-disable react/sort-comp */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable prefer-destructuring */
 import React, { Component } from 'react';
 
 class InputComponent extends Component {
@@ -17,6 +20,7 @@ class InputComponent extends Component {
       inputValue: '',
       minValue: '',
       secValue: '',
+      hasTask: true,
     };
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -24,12 +28,24 @@ class InputComponent extends Component {
     this.handleChangeMin = this.handleChangeMin.bind(this);
     this.handleKeyDownSec = this.handleKeyDownSec.bind(this);
     this.handleChangeSec = this.handleChangeSec.bind(this);
+    this.noTaskName = this.noTaskName.bind(this);
+  }
+  noTaskName(value) {
+    if (value) {
+      this.setState({ hasTask: true });
+    } else {
+      this.setState({ hasTask: false });
+    }
   }
 
   handleKeyDown(event) {
     const { onSave } = this.props;
     const { inputValue, minValue, secValue } = this.state;
+    if (event.keyCode === 13 && inputValue.trim() === '') {
+      this.noTaskName(false);
+    }
     if (event.keyCode === 13 && inputValue.trim() !== '') {
+      this.noTaskName(true);
       if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
         onSave(inputValue, `${minValue}:${secValue}`);
         this.setState({ inputValue: '', secValue: '', minValue: '' });
@@ -43,7 +59,12 @@ class InputComponent extends Component {
   handleKeyDownMin(event) {
     const { onSave } = this.props;
     const { inputValue, minValue, secValue } = this.state;
+
+    if (event.keyCode === 13 && inputValue.trim() === '') {
+      this.noTaskName(false);
+    }
     if (event.keyCode === 13 && inputValue.trim() !== '') {
+      this.noTaskName(true);
       if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
         onSave(inputValue, `${minValue}:${secValue}`);
         this.setState({ inputValue: '', secValue: '', minValue: '' });
@@ -57,37 +78,57 @@ class InputComponent extends Component {
   handleKeyDownSec(event) {
     const { onSave } = this.props;
     const { inputValue, minValue, secValue } = this.state;
-    if (event.keyCode === 13 && inputValue.trim() !== '') {
-      if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
-        onSave(inputValue, `${minValue}:${secValue}`);
-        this.setState({ inputValue: '', secValue: '', minValue: '' });
-      } else {
-        onSave(inputValue, 0);
-        this.setState({ inputValue: '', secValue: '', minValue: '' });
+    if (event.keyCode === 13) {
+      if (inputValue.trim() === '') {
+        this.noTaskName(false);
+        return;
+      }
+      if (inputValue.trim() !== '') {
+        this.noTaskName(true);
+        if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
+          onSave(inputValue, `${minValue}:${secValue}`);
+          this.setState({ inputValue: '', secValue: '', minValue: '' });
+        } else {
+          onSave(inputValue, 0);
+          this.setState({ inputValue: '', secValue: '', minValue: '' });
+        }
       }
     }
   }
 
   handleChange(event) {
-    if (event.target.value) this.setState({ inputValue: event.target.value });
+    const value = event.target.value;
+    if (value) this.setState({ inputValue: value });
   }
 
   handleChangeMin(event) {
-    if (event.target.value) this.setState({ minValue: event.target.value });
+    const value = event.target.value;
+    if (value && value <= 59) {
+      this.setState({ minValue: value });
+    } else {
+      this.setState({ minValue: 59 });
+    }
+    if (value) this.setState({ minValue: value });
   }
 
   handleChangeSec(event) {
-    if (event.target.value) this.setState({ secValue: event.target.value });
+    const value = event.target.value;
+    if (value && value <= 59) {
+      this.setState({ secValue: value });
+    } else {
+      this.setState({ secValue: 59 });
+    }
+    if (value) this.setState({ secValue: value });
   }
 
   render() {
-    const { inputValue, secValue, minValue } = this.state;
+    const { inputValue, secValue, minValue, hasTask } = this.state;
 
     return (
       <form className="new-todo-form">
         <input
           type="text"
-          className="new-todo"
+          className={hasTask ? 'new-todo' : 'new-todo incorrect'}
           value={inputValue}
           onChange={this.handleChange}
           onKeyDown={this.handleKeyDown}
@@ -95,6 +136,7 @@ class InputComponent extends Component {
           autoFocus
         />
         <input
+          type="number"
           value={minValue}
           className="new-todo-form__timer"
           onChange={this.handleChangeMin}
@@ -102,6 +144,7 @@ class InputComponent extends Component {
           placeholder="Min"
         />
         <input
+          type="number"
           value={secValue}
           className="new-todo-form__timer"
           onChange={this.handleChangeSec}

@@ -36,6 +36,7 @@ export default class Task extends Component {
       timer,
       taskId,
       timerUpdate,
+      filter,
     } = this.props;
 
     const classNameState = classNames({
@@ -63,6 +64,7 @@ export default class Task extends Component {
               name={name}
               done={done}
               timerUpdate={timerUpdate}
+              filter={filter}
             />
             <span className="description">
               created - {createdDataHelper(createdDate)}
@@ -71,7 +73,7 @@ export default class Task extends Component {
           <button className="icon icon-edit" onClick={onToggleEdit} />
           <button className="icon icon-destroy" onClick={onDeleted} />
         </div>
-        <EditState props={this.props} onUpdate={onUpdate} />
+        <EditState taskId={taskId} props={this.props} onUpdate={onUpdate} />
       </li>
     );
   }

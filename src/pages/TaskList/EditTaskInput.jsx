@@ -22,6 +22,11 @@ export default class EditState extends Component {
       onUpdate(newValue, taskId);
       this.setState({ inputValue: '' });
     }
+    if (event.key === 'Escape') {
+      const id = this.props.taskId;
+      const onToggleEdit = this.props.props.onToggleEdit;
+      onToggleEdit(id);
+    }
   }
 
   handleChange(event) {

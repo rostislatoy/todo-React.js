@@ -5,45 +5,17 @@
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-
+/* eslint-disable lines-between-class-members */
 import React from 'react';
-
-function timeToSeconds(timeString) {
-  if (
-    !timeString.includes(':') ||
-    timeString.startsWith(':') ||
-    timeString.endsWith(':')
-  ) {
-    return 0;
-  }
-
-  const [minutes, seconds] = timeString.split(':');
-
-  if (isNaN(parseInt(minutes)) || isNaN(parseInt(seconds))) {
-    return 0;
-  }
-
-  return parseInt(minutes) * 60 + parseInt(seconds);
-}
-
-function formatTime(time) {
-  if (typeof time !== 'number' || time < 0) {
-    return `Time's up`;
-  }
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
-  return `${minutes < 10 ? `0${minutes}` : minutes}:${
-    seconds < 10 ? `0${seconds}` : seconds
-  }`;
-}
+import { timeToSeconds, formatTime } from './taskTimerHelper';
 
 class TaskTimer extends React.Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       timeRemaining: timeToSeconds(props.time),
       timerRunning: false,
+      shouldStopTimer: false,
     };
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
@@ -57,6 +29,19 @@ class TaskTimer extends React.Component {
         }));
       }
     }, 1000);
+  }
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.filter !== this.props.filter &&
+      this.state.timerRunning &&
+      !this.state.shouldStopTimer
+    ) {
+      console.log('changed');
+      this.setState({ shouldStopTimer: true });
+    } else if (this.state.shouldStopTimer) {
+      this.stopTimer();
+      this.setState({ shouldStopTimer: false });
+    }
   }
 
   componentWillUnmount() {

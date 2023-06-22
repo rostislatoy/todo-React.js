@@ -465,3 +465,26 @@ html .clear-completed:active {
   color: gray;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
+.incorrect::placeholder {
+  color: red !important;
+}
+.incorrect {
+  animation: shake 0.4s ease-in-out;
+}
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
