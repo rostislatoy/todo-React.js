@@ -14,7 +14,7 @@ export default class App extends Component {
       todos: [],
       filter: filterState.All,
     };
-    this.defaultId = 300;
+    this.defaultId = 400;
     this.onToggleEdit = this.onToggleEdit.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.onToggleDone = this.onToggleDone.bind(this);
@@ -110,7 +110,7 @@ export default class App extends Component {
     }
   }
 
-  createItem(name, timer = 0) {
+  createItem(name, timer = ':') {
     return {
       name,
       done: false,
@@ -141,7 +141,7 @@ export default class App extends Component {
     });
   }
 
-  saveItem(text, timer = 0) {
+  saveItem(text, timer = ':') {
     this.setState(({ todos }) => {
       const newTask = this.createItem(text, timer);
       const newArr = [...todos, newTask];
@@ -151,7 +151,7 @@ export default class App extends Component {
     });
   }
 
-  updateItem(text, id, timer) {
+  updateItem(text, id, timer = ':') {
     this.setState(({ todos }) => {
       const idx = todos.findIndex((el) => el.id === id);
       const oldItem = todos[idx];
