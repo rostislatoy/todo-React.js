@@ -1,6 +1,7 @@
 /* eslint-disable react/sort-comp */
 /* eslint-disable react/no-unused-class-component-methods */
 /* eslint-disable react/no-unused-state */
+/* eslint-disable import/no-extraneous-dependencies */
 import React, { Component } from 'react';
 import TaskList from '../pages/TaskList/TaskList';
 import Header from '../pages/Header/Header';
@@ -14,7 +15,7 @@ export default class App extends Component {
       todos: [],
       filter: filterState.All,
     };
-    this.defaultId = 400;
+    this.defaultId = 700;
     this.onToggleEdit = this.onToggleEdit.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.onToggleDone = this.onToggleDone.bind(this);

@@ -12,6 +12,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-useless-constructor */
+/* eslint-disable lines-between-class-members */
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import EditState from './EditTaskInput';
@@ -22,7 +23,6 @@ export default class Task extends Component {
   constructor() {
     super();
   }
-
   render() {
     const {
       name,
@@ -38,7 +38,6 @@ export default class Task extends Component {
       timerUpdate,
       filter,
     } = this.props;
-
     const classNameState = classNames({
       completed: done,
       editing: edit,

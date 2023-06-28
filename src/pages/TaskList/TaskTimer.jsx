@@ -6,6 +6,7 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable lines-between-class-members */
+/* eslint-disable react/no-unused-state */
 import React from 'react';
 import { timeToSeconds, formatTime } from './taskTimerHelper';
 
@@ -15,7 +16,6 @@ class TaskTimer extends React.Component {
     this.state = {
       timeRemaining: timeToSeconds(props.time),
       timerRunning: false,
-      shouldStopTimer: false,
     };
     this.startTimer = this.startTimer.bind(this);
     this.stopTimer = this.stopTimer.bind(this);
@@ -30,19 +30,11 @@ class TaskTimer extends React.Component {
       }
     }, 1000);
   }
-  componentDidUpdate(prevProps) {
-    if (
-      prevProps.filter !== this.props.filter &&
-      this.state.timerRunning &&
-      !this.state.shouldStopTimer
-    ) {
-      this.setState({ shouldStopTimer: true });
-    } else if (this.state.shouldStopTimer) {
-      this.stopTimer();
-      this.setState({ shouldStopTimer: false });
+  componentDidUpdate() {
+    if (this.state.timeRemaining <= 0 && this.state.timerRunning) {
+      this.setState({ timerRunning: false });
     }
   }
-
   componentWillUnmount() {
     clearInterval(this.intervalId);
   }
@@ -57,14 +49,19 @@ class TaskTimer extends React.Component {
       formatTime(this.state.timeRemaining),
       this.props.taskId
     );
+    clearInterval(this.intervalId);
   }
 
   render() {
+    const { timeRemaining, timerRunning } = this.state;
     return (
       <span className="description">
-        <button onClick={this.startTimer} className="icon icon-play" />
-        <button onClick={this.stopTimer} className="icon icon-pause" />
-        {formatTime(this.state.timeRemaining)}
+        {!timerRunning ? (
+          <button onClick={this.startTimer} className="icon icon-play" />
+        ) : (
+          <button onClick={this.stopTimer} className="icon icon-pause" />
+        )}
+        {formatTime(timeRemaining)}
       </span>
     );
   }
