@@ -47,7 +47,6 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
-    console.log('update');
     const { todos, filter } = this.state;
     localStorage.setItem('todos', JSON.stringify(todos));
     localStorage.setItem('filter', filter);
@@ -236,10 +235,7 @@ export default class App extends Component {
 
   render() {
     const { todos, filter } = this.state;
-    // console.log(this.timerProgressive(todos[0]));
-    console.log(todos);
     const getDoneTasks = todos.filter((el) => !el.done).length;
-
     return (
       <section className="todoapp">
         <Header
