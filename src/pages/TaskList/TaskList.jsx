@@ -12,6 +12,7 @@ function TaskList({
   onToggleEdit,
   onUpdate,
   filter,
+  timerUpdate,
 }) {
   const elements = todos.map((el) => {
     const { id, ...elProps } = el;
@@ -20,12 +21,15 @@ function TaskList({
         key={id}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...elProps}
+        task={el}
         todos={todos}
         onDeleted={() => onDeleted(id)}
         onToggleDone={() => onToggleDone(id)}
         onToggleEdit={() => onToggleEdit(id)}
         onUpdate={onUpdate}
         taskId={id}
+        filter={filter}
+        timerUpdate={timerUpdate}
       />
     );
   });
@@ -51,6 +55,7 @@ TaskList.defaultProps = {
   onToggleDone: () => {},
   onToggleEdit: () => {},
   onUpdate: () => {},
+  timerUpdate: () => {},
   filter: '',
 };
 
@@ -62,6 +67,7 @@ TaskList.propTypes = {
   onToggleEdit: PropTypes.func,
   onUpdate: PropTypes.func,
   filter: PropTypes.string,
+  timerUpdate: PropTypes.func,
 };
 
 export default TaskList;

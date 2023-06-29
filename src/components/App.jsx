@@ -1,3 +1,8 @@
+/* eslint-disable react/sort-comp */
+/* eslint-disable react/no-unused-class-component-methods */
+/* eslint-disable react/no-unused-state */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable lines-between-class-members */
 import React, { Component } from 'react';
 import TaskList from '../pages/TaskList/TaskList';
 import Header from '../pages/Header/Header';
@@ -10,8 +15,9 @@ export default class App extends Component {
     this.state = {
       todos: [],
       filter: filterState.All,
+      timers: [],
     };
-    this.defaultId = 200;
+    this.defaultId = 700;
     this.onToggleEdit = this.onToggleEdit.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.onToggleDone = this.onToggleDone.bind(this);
@@ -20,6 +26,7 @@ export default class App extends Component {
     this.clearCompletedTasks = this.clearCompletedTasks.bind(this);
     this.deleteItem = this.deleteItem.bind(this);
     this.saveItem = this.saveItem.bind(this);
+    this.updateTaskTime = this.updateTaskTime.bind(this);
     this.updateItem = this.updateItem.bind(this);
   }
 
@@ -83,6 +90,17 @@ export default class App extends Component {
     });
   }
 
+  updateTaskTime(remainingTime, taskId, timeTrack = false) {
+    this.setState((prevState) => ({
+      todos: prevState.todos.map((task) => {
+        if (task.id === taskId) {
+          return { ...task, timer: remainingTime, timeTrack };
+        }
+        return task;
+      }),
+    }));
+  }
+
   getFilteredTasks() {
     const { todos, filter } = this.state;
     switch (filter) {
@@ -95,13 +113,15 @@ export default class App extends Component {
     }
   }
 
-  createItem(name) {
+  createItem(name, timer = ':') {
     return {
       name,
       done: false,
       createdDate: new Date(),
       edit: false,
       status: 'view',
+      timer,
+      timerTrack: false,
       id: this.defaultId++,
     };
   }
@@ -125,9 +145,9 @@ export default class App extends Component {
     });
   }
 
-  saveItem(text) {
+  saveItem(text, timer = ':') {
     this.setState(({ todos }) => {
-      const newTask = this.createItem(text);
+      const newTask = this.createItem(text, timer);
       const newArr = [...todos, newTask];
       return {
         todos: newArr,
@@ -135,7 +155,7 @@ export default class App extends Component {
     });
   }
 
-  updateItem(text, id) {
+  updateItem(text, id, timer = ':') {
     this.setState(({ todos }) => {
       const idx = todos.findIndex((el) => el.id === id);
       const oldItem = todos[idx];
@@ -143,6 +163,7 @@ export default class App extends Component {
         ...oldItem,
         edit: !oldItem.edit,
         name: text,
+        timer,
       };
       const newArray = [
         ...todos.slice(0, idx),
@@ -155,21 +176,26 @@ export default class App extends Component {
       };
     });
   }
-
   render() {
     const { todos, filter } = this.state;
+
     const getDoneTasks = todos.filter((el) => !el.done).length;
 
     return (
       <section className="todoapp">
-        <Header todos={todos} onSave={this.saveItem} />
+        <Header
+          todos={todos}
+          onSave={this.saveItem}
+          onUpdate={this.updateItem}
+        />
         <section className="main">
           <TaskList
             todos={this.getFilteredTasks()}
             onDeleted={this.deleteItem}
+            onUpdate={this.updateItem}
             onToggleDone={this.onToggleDone}
             onToggleEdit={this.onToggleEdit}
-            onUpdate={this.updateItem}
+            timerUpdate={this.updateTaskTime}
             filter={filter}
           />
         </section>
