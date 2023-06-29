@@ -3,11 +3,14 @@
 /* eslint-disable react/no-unused-state */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable lines-between-class-members */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
 import TaskList from '../pages/TaskList/TaskList';
 import Header from '../pages/Header/Header';
 import Footer from '../pages/Footer/Footer';
 import filterState from '../constants/filter';
+import { timeToSeconds, formatTime } from '../pages/TaskList/taskTimerHelper';
 
 export default class App extends Component {
   constructor() {
@@ -15,9 +18,9 @@ export default class App extends Component {
     this.state = {
       todos: [],
       filter: filterState.All,
-      timers: [],
     };
-    this.defaultId = 700;
+    this.defaultId = 800;
+    this.timers = {};
     this.onToggleEdit = this.onToggleEdit.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.onToggleDone = this.onToggleDone.bind(this);
@@ -28,6 +31,10 @@ export default class App extends Component {
     this.saveItem = this.saveItem.bind(this);
     this.updateTaskTime = this.updateTaskTime.bind(this);
     this.updateItem = this.updateItem.bind(this);
+    this.timerProgressive = this.timerProgressive.bind(this);
+    this.onTimerTrack = this.onTimerTrack.bind(this);
+    this.startTimer = this.startTimer.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
   }
 
   componentDidMount() {
@@ -40,9 +47,25 @@ export default class App extends Component {
   }
 
   componentDidUpdate() {
+    console.log('update');
     const { todos, filter } = this.state;
     localStorage.setItem('todos', JSON.stringify(todos));
     localStorage.setItem('filter', filter);
+  }
+
+  timerProgressive(id) {
+    this.setState(({ todos }) => {
+      const idx = todos.findIndex((el) => el.id === id);
+      const updatedTodos = [...todos];
+      updatedTodos[idx].timer = timeToSeconds(updatedTodos[idx].timer) - 1;
+      updatedTodos[idx].timer = formatTime(updatedTodos[idx].timer);
+      return {
+        todos: updatedTodos,
+      };
+    });
+  }
+  componentWillUnmount() {
+    clearInterval(this.timerInterval);
   }
 
   handleFilterChange(newFilterValue) {
@@ -57,6 +80,27 @@ export default class App extends Component {
       const newItem = {
         ...oldItem,
         done: !oldItem.done,
+      };
+      const newArray = [
+        ...todos.slice(0, idx),
+        newItem,
+        ...todos.slice(idx + 1),
+      ];
+
+      return {
+        todos: newArray,
+      };
+    });
+  }
+
+  onTimerTrack(id) {
+    this.setState(({ todos }) => {
+      const idx = todos.findIndex((el) => el.id === id);
+
+      const oldItem = todos[idx];
+      const newItem = {
+        ...oldItem,
+        timerTrack: !oldItem.timerTrack,
       };
       const newArray = [
         ...todos.slice(0, idx),
@@ -136,6 +180,7 @@ export default class App extends Component {
   }
 
   deleteItem(id) {
+    this.stopTimer(id);
     this.setState(({ todos }) => {
       const idx = todos.findIndex((el) => el.id === id);
       const newArr = todos.filter((el, index) => index !== idx);
@@ -176,9 +221,23 @@ export default class App extends Component {
       };
     });
   }
+  startTimer(taskId) {
+    this.onTimerTrack(taskId);
+    this.intervalId = setInterval(() => {
+      this.timerProgressive(taskId);
+    }, 1000);
+  }
+
+  stopTimer(taskId, timer) {
+    this.onTimerTrack(taskId);
+    this.updateTaskTime(timer, taskId);
+    clearInterval(this.intervalId);
+  }
+
   render() {
     const { todos, filter } = this.state;
-
+    // console.log(this.timerProgressive(todos[0]));
+    console.log(todos);
     const getDoneTasks = todos.filter((el) => !el.done).length;
 
     return (
@@ -190,6 +249,10 @@ export default class App extends Component {
         />
         <section className="main">
           <TaskList
+            startTimer={this.startTimer}
+            stopTimer={this.stopTimer}
+            onTimerTrack={this.onTimerTrack}
+            timerProgressive={this.timerProgressive}
             todos={this.getFilteredTasks()}
             onDeleted={this.deleteItem}
             onUpdate={this.updateItem}

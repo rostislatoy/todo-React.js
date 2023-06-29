@@ -13,14 +13,22 @@ function TaskList({
   onUpdate,
   filter,
   timerUpdate,
+  timerProgressive,
+  onTimerTrack,
+  stopTimer,
+  startTimer,
 }) {
   const elements = todos.map((el) => {
-    const { id, ...elProps } = el;
+    const { id, timerTrack, ...elProps } = el;
     return (
       <Task
         key={id}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...elProps}
+        startTimer={startTimer}
+        stopTimer={stopTimer}
+        timerTrack={timerTrack}
+        onTimerTrack={onTimerTrack}
         task={el}
         todos={todos}
         onDeleted={() => onDeleted(id)}
@@ -30,6 +38,7 @@ function TaskList({
         taskId={id}
         filter={filter}
         timerUpdate={timerUpdate}
+        timerProgressive={timerProgressive}
       />
     );
   });
@@ -56,7 +65,11 @@ TaskList.defaultProps = {
   onToggleEdit: () => {},
   onUpdate: () => {},
   timerUpdate: () => {},
+  onTimerTrack: () => {},
   filter: '',
+  timerProgressive: () => {},
+  startTimer: () => {},
+  stopTimer: () => {},
 };
 
 TaskList.propTypes = {
@@ -68,6 +81,10 @@ TaskList.propTypes = {
   onUpdate: PropTypes.func,
   filter: PropTypes.string,
   timerUpdate: PropTypes.func,
+  timerProgressive: PropTypes.func,
+  onTimerTrack: PropTypes.func,
+  startTimer: PropTypes.func,
+  stopTimer: PropTypes.func,
 };
 
 export default TaskList;

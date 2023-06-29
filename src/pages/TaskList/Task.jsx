@@ -22,42 +22,6 @@ import { timeToSeconds, formatTime } from './taskTimerHelper';
 export default class Task extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      timeRemaining: timeToSeconds(props.timer),
-      timerRunning: false,
-    };
-    this.startTimer = this.startTimer.bind(this);
-    this.stopTimer = this.stopTimer.bind(this);
-  }
-
-  componentDidMount() {
-    this.intervalId = setInterval(() => {
-      if (this.state.timerRunning) {
-        this.setState((prevState) => ({
-          timeRemaining: prevState.timeRemaining - 1,
-        }));
-      }
-    }, 1000);
-  }
-  componentDidUpdate() {
-    if (this.state.timeRemaining <= 0 && this.state.timerRunning) {
-      this.setState({ timerRunning: false });
-    }
-  }
-  componentWillUnmount() {
-    clearInterval(this.intervalId);
-  }
-
-  startTimer() {
-    this.setState({ timerRunning: true });
-  }
-
-  stopTimer() {
-    this.setState({ timerRunning: false });
-    this.props.timerUpdate(
-      formatTime(this.state.timeRemaining),
-      this.props.taskId
-    );
   }
   render() {
     const {
@@ -70,8 +34,9 @@ export default class Task extends Component {
       edit,
       createdDate,
       taskId,
+      timerTrack,
+      timer,
     } = this.props;
-    const { timeRemaining, timerRunning } = this.state;
     const classNameState = classNames({
       completed: done,
       editing: edit,
@@ -92,12 +57,18 @@ export default class Task extends Component {
               {name}
             </span>
             <span className="description">
-              {!timerRunning ? (
-                <button onClick={this.startTimer} className="icon icon-play" />
+              {!timerTrack ? (
+                <button
+                  onClick={() => this.props.startTimer(taskId, timerTrack)}
+                  className="icon icon-play"
+                />
               ) : (
-                <button onClick={this.stopTimer} className="icon icon-pause" />
+                <button
+                  onClick={() => this.props.stopTimer(taskId, timer)}
+                  className="icon icon-pause"
+                />
               )}
-              {formatTime(timeRemaining)}
+              {formatTime(timeToSeconds(timer))}
             </span>
             <span className="description">
               created - {createdDataHelper(createdDate)}

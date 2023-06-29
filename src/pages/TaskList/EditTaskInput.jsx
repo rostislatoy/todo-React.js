@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable react/destructuring-assignment */
+
 import React, { Component } from 'react';
 
 export default class EditState extends Component {
@@ -19,7 +20,8 @@ export default class EditState extends Component {
     const { taskId } = this.props.props;
     if (event.keyCode === 13) {
       const newValue = inputValue;
-      onUpdate(newValue, taskId);
+      console.log(this.props.props.timer);
+      onUpdate(newValue, taskId, this.props.props.timer);
       this.setState({ inputValue: '' });
     }
     if (event.key === 'Escape') {
