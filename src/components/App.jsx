@@ -2,6 +2,7 @@
 /* eslint-disable react/no-unused-class-component-methods */
 /* eslint-disable react/no-unused-state */
 /* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable lines-between-class-members */
 import React, { Component } from 'react';
 import TaskList from '../pages/TaskList/TaskList';
 import Header from '../pages/Header/Header';
@@ -14,6 +15,7 @@ export default class App extends Component {
     this.state = {
       todos: [],
       filter: filterState.All,
+      timers: [],
     };
     this.defaultId = 700;
     this.onToggleEdit = this.onToggleEdit.bind(this);
@@ -88,11 +90,11 @@ export default class App extends Component {
     });
   }
 
-  updateTaskTime(remainingTime, taskId) {
+  updateTaskTime(remainingTime, taskId, timeTrack = false) {
     this.setState((prevState) => ({
       todos: prevState.todos.map((task) => {
         if (task.id === taskId) {
-          return { ...task, timer: remainingTime };
+          return { ...task, timer: remainingTime, timeTrack };
         }
         return task;
       }),
@@ -119,6 +121,7 @@ export default class App extends Component {
       edit: false,
       status: 'view',
       timer,
+      timerTrack: false,
       id: this.defaultId++,
     };
   }
@@ -173,7 +176,6 @@ export default class App extends Component {
       };
     });
   }
-
   render() {
     const { todos, filter } = this.state;
 

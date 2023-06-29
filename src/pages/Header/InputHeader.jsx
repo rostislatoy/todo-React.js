@@ -27,9 +27,8 @@ class InputComponent extends Component {
     };
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleKeyDownMin = this.handleKeyDownMin.bind(this);
     this.handleChangeMin = this.handleChangeMin.bind(this);
-    this.handleKeyDownSec = this.handleKeyDownSec.bind(this);
+    this.handleKeyDownTimer = this.handleKeyDownTimer.bind(this);
     this.handleChangeSec = this.handleChangeSec.bind(this);
     this.noTaskName = this.noTaskName.bind(this);
   }
@@ -77,38 +76,7 @@ class InputComponent extends Component {
     }
   }
 
-  handleKeyDownMin(event) {
-    const { onSave } = this.props;
-    const { inputValue, minValue, secValue } = this.state;
-    if (event.keyCode === 13) {
-      if (inputValue.trim() === '') {
-        this.noTaskName(false);
-      }
-      if (secValue.trim() === '') {
-        this.noTaskSec(false);
-      }
-      if (minValue.trim() === '') {
-        this.noTaskMin(false);
-      }
-
-      if (inputValue.trim() !== '') {
-        this.noTaskName(true);
-        if (minValue.trim() !== '' && secValue.trim() !== '') {
-          this.noTaskMin(true);
-          this.noTaskSec(true);
-
-          if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
-            onSave(inputValue, `${minValue}:${secValue}`);
-            this.setState({ inputValue: '', secValue: '', minValue: '' });
-          } else {
-            onSave(inputValue, 0);
-            this.setState({ inputValue: '', secValue: '', minValue: '' });
-          }
-        }
-      }
-    }
-  }
-  handleKeyDownSec(event) {
+  handleKeyDownTimer(event) {
     const { onSave } = this.props;
     const { inputValue, minValue, secValue } = this.state;
     if (event.keyCode === 13) {
@@ -189,7 +157,7 @@ class InputComponent extends Component {
             hasMin ? 'new-todo-form__timer' : 'new-todo-form__timer incorrect'
           }
           onChange={this.handleChangeMin}
-          onKeyDown={this.handleKeyDownMin}
+          onKeyDown={this.handleKeyDownTimer}
           placeholder="Min"
         />
         <input
@@ -201,7 +169,7 @@ class InputComponent extends Component {
             hasSec ? 'new-todo-form__timer' : 'new-todo-form__timer incorrect'
           }
           onChange={this.handleChangeSec}
-          onKeyDown={this.handleKeyDownSec}
+          onKeyDown={this.handleKeyDownTimer}
           placeholder="Sec"
         />
       </form>

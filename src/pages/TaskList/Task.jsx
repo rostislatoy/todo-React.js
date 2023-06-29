@@ -16,12 +16,48 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import EditState from './EditTaskInput';
-import TaskTimer from './TaskTimer';
 import createdDataHelper from './TaskListDataHelper';
+import { timeToSeconds, formatTime } from './taskTimerHelper';
 
 export default class Task extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+    this.state = {
+      timeRemaining: timeToSeconds(props.timer),
+      timerRunning: false,
+    };
+    this.startTimer = this.startTimer.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
+  }
+
+  componentDidMount() {
+    this.intervalId = setInterval(() => {
+      if (this.state.timerRunning) {
+        this.setState((prevState) => ({
+          timeRemaining: prevState.timeRemaining - 1,
+        }));
+      }
+    }, 1000);
+  }
+  componentDidUpdate() {
+    if (this.state.timeRemaining <= 0 && this.state.timerRunning) {
+      this.setState({ timerRunning: false });
+    }
+  }
+  componentWillUnmount() {
+    clearInterval(this.intervalId);
+  }
+
+  startTimer() {
+    this.setState({ timerRunning: true });
+  }
+
+  stopTimer() {
+    this.setState({ timerRunning: false });
+    this.props.timerUpdate(
+      formatTime(this.state.timeRemaining),
+      this.props.taskId
+    );
   }
   render() {
     const {
@@ -33,11 +69,9 @@ export default class Task extends Component {
       done,
       edit,
       createdDate,
-      timer,
       taskId,
-      timerUpdate,
-      filter,
     } = this.props;
+    const { timeRemaining, timerRunning } = this.state;
     const classNameState = classNames({
       completed: done,
       editing: edit,
@@ -57,14 +91,14 @@ export default class Task extends Component {
             <span onClick={onToggleDone} className="title">
               {name}
             </span>
-            <TaskTimer
-              time={timer}
-              taskId={taskId}
-              name={name}
-              done={done}
-              timerUpdate={timerUpdate}
-              filter={filter}
-            />
+            <span className="description">
+              {!timerRunning ? (
+                <button onClick={this.startTimer} className="icon icon-play" />
+              ) : (
+                <button onClick={this.stopTimer} className="icon icon-pause" />
+              )}
+              {formatTime(timeRemaining)}
+            </span>
             <span className="description">
               created - {createdDataHelper(createdDate)}
             </span>

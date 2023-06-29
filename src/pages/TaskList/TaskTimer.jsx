@@ -49,7 +49,6 @@ class TaskTimer extends React.Component {
       formatTime(this.state.timeRemaining),
       this.props.taskId
     );
-    clearInterval(this.intervalId);
   }
 
   render() {

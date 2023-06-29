@@ -21,6 +21,7 @@ function TaskList({
         key={id}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...elProps}
+        task={el}
         todos={todos}
         onDeleted={() => onDeleted(id)}
         onToggleDone={() => onToggleDone(id)}
