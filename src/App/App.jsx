@@ -1,16 +1,12 @@
-/* eslint-disable react/sort-comp */
-/* eslint-disable react/no-unused-class-component-methods */
-/* eslint-disable react/no-unused-state */
-/* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable lines-between-class-members */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react';
-import TaskList from '../pages/TaskList/TaskList';
-import Header from '../pages/Header/Header';
-import Footer from '../pages/Footer/Footer';
+import TaskList from '../components/TaskList/TaskList';
+import Header from '../components/Header/Header';
+import Footer from '../components/Footer/Footer';
 import filterState from '../constants/filter';
-import { timeToSeconds, formatTime } from '../pages/TaskList/taskTimerHelper';
+import {
+  timeToSeconds,
+  formatTime,
+} from '../components/TaskList/taskTimerHelper';
 
 export default class App extends Component {
   constructor() {
@@ -112,7 +108,6 @@ export default class App extends Component {
       };
     });
   }
-
   onToggleEdit(id) {
     this.setState(({ todos }) => {
       const idx = todos.findIndex((el) => el.id === id);
@@ -237,34 +232,37 @@ export default class App extends Component {
     const { todos, filter } = this.state;
     const getDoneTasks = todos.filter((el) => !el.done).length;
     return (
-      <section className="todoapp">
-        <Header
-          todos={todos}
-          onSave={this.saveItem}
-          onUpdate={this.updateItem}
-        />
-        <section className="main">
-          <TaskList
-            startTimer={this.startTimer}
-            stopTimer={this.stopTimer}
-            onTimerTrack={this.onTimerTrack}
-            timerProgressive={this.timerProgressive}
-            todos={this.getFilteredTasks()}
-            onDeleted={this.deleteItem}
+      <React.StrictMode>
+        <section className="todoapp">
+          <Header
+            todos={todos}
+            onSave={this.saveItem}
             onUpdate={this.updateItem}
-            onToggleDone={this.onToggleDone}
-            onToggleEdit={this.onToggleEdit}
-            timerUpdate={this.updateTaskTime}
+          />
+          <section className="main">
+            <TaskList
+              onOffEdit={this.onOffEdit}
+              startTimer={this.startTimer}
+              stopTimer={this.stopTimer}
+              onTimerTrack={this.onTimerTrack}
+              timerProgressive={this.timerProgressive}
+              todos={this.getFilteredTasks()}
+              onDeleted={this.deleteItem}
+              onUpdate={this.updateItem}
+              onToggleDone={this.onToggleDone}
+              onToggleEdit={this.onToggleEdit}
+              timerUpdate={this.updateTaskTime}
+              filter={filter}
+            />
+          </section>
+          <Footer
+            onFilterChange={this.handleFilterChange}
+            doneTasks={getDoneTasks}
+            clearCompleted={this.clearCompletedTasks}
             filter={filter}
           />
         </section>
-        <Footer
-          onFilterChange={this.handleFilterChange}
-          doneTasks={getDoneTasks}
-          clearCompleted={this.clearCompletedTasks}
-          filter={filter}
-        />
-      </section>
+      </React.StrictMode>
     );
   }
 }

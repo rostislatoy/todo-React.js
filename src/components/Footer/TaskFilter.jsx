@@ -1,5 +1,3 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/button-has-type */
 import React from 'react';
 import PropTypes from 'prop-types';
 import filterState from '../../constants/filter';

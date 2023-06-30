@@ -1,17 +1,3 @@
-/* eslint-disable no-restricted-globals */
-/* eslint-disable radix */
-/* eslint-disable prettier/prettier */
-/* eslint-disable react/no-unused-class-component-methods */
-/* eslint-disable lines-between-class-members */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable no-console */
-/* eslint-disable react/no-unused-state */
-/* eslint-disable jsx-a11y/no-autofocus */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/sort-comp */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable prefer-destructuring */
-
 import React, { Component } from 'react';
 
 class InputComponent extends Component {

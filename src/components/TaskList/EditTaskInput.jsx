@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
+
 
 import React, { Component } from 'react';
 
@@ -9,18 +8,17 @@ export default class EditState extends Component {
     this.state = {
       inputValue: '',
     };
+    this.inputRef = React.createRef();
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
-
+  
   handleKeyDown(event) {
     const { inputValue } = this.state;
-    // eslint-disable-next-line react/prop-types
     const { onUpdate } = this.props;
     const { taskId } = this.props.props;
     if (event.keyCode === 13) {
       const newValue = inputValue;
-      console.log(this.props.props.timer);
       onUpdate(newValue, taskId, this.props.props.timer);
       this.setState({ inputValue: '' });
     }
@@ -28,6 +26,9 @@ export default class EditState extends Component {
       const id = this.props.taskId;
       const onToggleEdit = this.props.props.onToggleEdit;
       onToggleEdit(id);
+    }
+    if (this.inputRef.current && !this.inputRef.current.contains(event.target) && this.props.props.edit) {
+      this.props.props.onToggleEdit(this.props.props.taskId);
     }
   }
 
@@ -42,6 +43,7 @@ export default class EditState extends Component {
         type="text"
         className="edit"
         defaultValue={name}
+        ref={this.inputRef}
         onChange={this.handleChange}
         onKeyDown={this.handleKeyDown}
       />

@@ -1,5 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
-/* eslint-disable no-else-return */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Task from './Task';
