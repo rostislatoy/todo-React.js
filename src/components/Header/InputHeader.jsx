@@ -1,166 +1,153 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 
-class InputComponent extends Component {
-  constructor() {
-    super();
-    this.state = {
-      inputValue: '',
-      minValue: '',
-      secValue: '',
-      hasTask: true,
-      hasMin: true,
-      hasSec: true,
-    };
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleChangeMin = this.handleChangeMin.bind(this);
-    this.handleKeyDownTimer = this.handleKeyDownTimer.bind(this);
-    this.handleChangeSec = this.handleChangeSec.bind(this);
-    this.noTaskName = this.noTaskName.bind(this);
-  }
-  noTaskName(boolean) {
+export default function InputComponent(props) {
+  const [inputValue, setInputValue] = useState('');
+  const [minValue, setMinValue] = useState('');
+  const [secValue, setSecValue] = useState('');
+  const [hasTask, setTask] = useState(true);
+  const [hasMin, setMin] = useState(true);
+  const [hasSec, setSec] = useState(true);
+
+  const { onSave } = props;
+
+  function noTaskName(boolean) {
     if (boolean) {
-      this.setState({ hasTask: true });
+      setTask(true);
     } else {
-      this.setState({ hasTask: false });
+      setTask(false);
     }
   }
-  noTaskMin(boolean) {
+  function noTaskMin(boolean) {
     if (boolean) {
-      this.setState({ hasMin: true });
+      setMin(true);
     } else {
-      this.setState({ hasMin: false });
+      setMin(false);
     }
   }
-  noTaskSec(boolean) {
+  function noTaskSec(boolean) {
     if (boolean) {
-      this.setState({ hasSec: true });
+      setSec(true);
     } else {
-      this.setState({ hasSec: false });
+      setSec(false);
     }
   }
-  handleKeyDown(event) {
-    const { onSave } = this.props;
-    const { inputValue, minValue, secValue } = this.state;
+  function handleKeyDown(event) {
     if (event.keyCode === 13 && inputValue.trim() === '') {
-      this.noTaskName(false);
-      this.noTaskMin(false);
-      this.noTaskSec(false);
+      noTaskName(false);
+      noTaskMin(false);
+      noTaskSec(false);
     }
     if (event.keyCode === 13 && inputValue.trim() !== '') {
-      this.noTaskName(true);
-      this.noTaskMin(true);
-      this.noTaskSec(true);
+      noTaskName(true);
+      noTaskMin(true);
+      noTaskSec(true);
 
       if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
         onSave(inputValue, `${minValue}:${secValue}`);
-        this.setState({ inputValue: '', secValue: '', minValue: '' });
+        setInputValue('');
+        setMinValue('');
+        setSecValue('');
       } else {
         onSave(inputValue, 0);
-        this.setState({ inputValue: '', secValue: '', minValue: '' });
+        setInputValue('');
+        setMinValue('');
+        setSecValue('');
       }
     }
   }
 
-  handleKeyDownTimer(event) {
-    const { onSave } = this.props;
-    const { inputValue, minValue, secValue } = this.state;
+  function handleKeyDownTimer(event) {
     if (event.keyCode === 13) {
       if (inputValue.trim() === '') {
-        this.noTaskName(false);
+        noTaskName(false);
       }
       if (secValue.trim() === '') {
-        this.noTaskSec(false);
+        noTaskSec(false);
       }
       if (minValue.trim() === '') {
-        this.noTaskMin(false);
+        noTaskMin(false);
       }
 
       if (inputValue.trim() !== '') {
-        this.noTaskName(true);
+        noTaskName(true);
         if (minValue.trim() !== '' && secValue.trim() !== '') {
-          this.noTaskMin(true);
-          this.noTaskSec(true);
+          noTaskMin(true);
+          noTaskSec(true);
 
           if ((parseInt(minValue) && parseInt(secValue)) !== isNaN) {
             onSave(inputValue, `${minValue}:${secValue}`);
-            this.setState({ inputValue: '', secValue: '', minValue: '' });
+            setInputValue('');
+            setMinValue('');
+            setSecValue('');
           } else {
             onSave(inputValue, 0);
-            this.setState({ inputValue: '', secValue: '', minValue: '' });
+            setInputValue('');
+            setMinValue('');
+            setSecValue('');
           }
         }
       }
     }
   }
 
-  handleChange(event) {
+  function handleChange(event) {
     const value = event.target.value;
-    if (value) this.setState({ inputValue: value });
+    if (value) setInputValue(value);
   }
-
-  handleChangeMin(event) {
-    const value = event.target.value;
-    if (value && value <= 59) {
-      this.setState({ minValue: value });
-    } else {
-      this.setState({ minValue: 59 });
-    }
-    if (value) this.setState({ minValue: value });
-  }
-
-  handleChangeSec(event) {
+  function handleChangeMin(event) {
     const value = event.target.value;
     if (value && value <= 59) {
-      this.setState({ secValue: value });
+      setMinValue(value);
     } else {
-      this.setState({ secValue: 59 });
+      setMinValue(59);
     }
-    if (value) this.setState({ secValue: value });
+    if (value) setMinValue(value);
   }
 
-  render() {
-    const { inputValue, secValue, minValue, hasTask, hasMin, hasSec } =
-      this.state;
-
-    return (
-      <form className="new-todo-form">
-        <input
-          type="text"
-          className={hasTask ? 'new-todo' : 'new-todo incorrect'}
-          value={inputValue}
-          onChange={this.handleChange}
-          onKeyDown={this.handleKeyDown}
-          placeholder="Task"
-          autoFocus
-        />
-        <input
-          type="number"
-          value={minValue}
-          min={0}
-          max={59}
-          className={
-            hasMin ? 'new-todo-form__timer' : 'new-todo-form__timer incorrect'
-          }
-          onChange={this.handleChangeMin}
-          onKeyDown={this.handleKeyDownTimer}
-          placeholder="Min"
-        />
-        <input
-          type="number"
-          value={secValue}
-          min={0}
-          max={59}
-          className={
-            hasSec ? 'new-todo-form__timer' : 'new-todo-form__timer incorrect'
-          }
-          onChange={this.handleChangeSec}
-          onKeyDown={this.handleKeyDownTimer}
-          placeholder="Sec"
-        />
-      </form>
-    );
+  function handleChangeSec(event) {
+    const value = event.target.value;
+    if (value && value <= 59) {
+      setSecValue(value);
+    } else {
+      setSecValue(59);
+    }
+    if (value) setSecValue(value);
   }
+  return (
+    <form className="new-todo-form">
+      <input
+        type="text"
+        className={hasTask ? 'new-todo' : 'new-todo incorrect'}
+        value={inputValue}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        placeholder="Task"
+        autoFocus
+      />
+      <input
+        type="number"
+        value={minValue}
+        min={0}
+        max={59}
+        className={
+          hasMin ? 'new-todo-form__timer' : 'new-todo-form__timer incorrect'
+        }
+        onChange={handleChangeMin}
+        onKeyDown={handleKeyDownTimer}
+        placeholder="Min"
+      />
+      <input
+        type="number"
+        value={secValue}
+        min={0}
+        max={59}
+        className={
+          hasSec ? 'new-todo-form__timer' : 'new-todo-form__timer incorrect'
+        }
+        onChange={handleChangeSec}
+        onKeyDown={handleKeyDownTimer}
+        placeholder="Sec"
+      />
+    </form>
+  );
 }
-
-export default InputComponent;

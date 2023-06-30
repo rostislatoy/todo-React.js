@@ -4,8 +4,7 @@ import EditState from './EditTaskInput';
 import createdDataHelper from './TaskListDataHelper';
 import { timeToSeconds, formatTime } from './taskTimerHelper';
 
-
-export default function Task (props) {
+export default function Task(props) {
   const {
     name,
     onDeleted,
@@ -20,7 +19,7 @@ export default function Task (props) {
     timer,
     startTimer,
     stopTimer,
-  } = props
+  } = props;
   const classNameState = classNames({
     completed: done,
     editing: edit,
