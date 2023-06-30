@@ -16,7 +16,6 @@ export default class App extends Component {
       filter: filterState.All,
     };
     this.defaultId = 800;
-    this.timers = {};
     this.onToggleEdit = this.onToggleEdit.bind(this);
     this.handleFilterChange = this.handleFilterChange.bind(this);
     this.onToggleDone = this.onToggleDone.bind(this);
