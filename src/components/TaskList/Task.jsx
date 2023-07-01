@@ -40,17 +40,14 @@ export default function Task(props) {
             {name}
           </span>
           <span className="description">
-            {!timerTrack ? (
-              <button
-                onClick={() => startTimer(taskId, timerTrack)}
-                className="icon icon-play"
-              />
-            ) : (
-              <button
-                onClick={() => stopTimer(taskId, timer)}
-                className="icon icon-pause"
-              />
-            )}
+            <button
+              onClick={() => startTimer(taskId, timerTrack)}
+              className="icon icon-play"
+            />
+            <button
+              onClick={() => stopTimer(taskId, timer)}
+              className="icon icon-pause"
+            />
             {formatTime(timeToSeconds(timer))}
           </span>
           <span className="description">

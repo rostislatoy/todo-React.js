@@ -10,6 +10,7 @@ export default function EditState({ props }) {
       const newValue = inputValue;
       onUpdate(newValue, taskId, timer);
       setInputValue('');
+      onToggleEdit(taskId);
     }
     if (event.key === 'Escape') {
       const id = taskId;
