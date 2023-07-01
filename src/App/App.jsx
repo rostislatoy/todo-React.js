@@ -9,7 +9,6 @@ import {
   formatTime,
 } from '../components/TaskList/taskTimerHelper';
 
-// let intervalId;
 
 export default function App() {
   const [todos, setTodos] = useState([]);
