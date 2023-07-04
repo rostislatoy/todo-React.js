@@ -1,11 +1,4 @@
-/* eslint-disable no-restricted-globals */
-/* eslint-disable radix */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/self-closing-comp */
-/* eslint-disable react/button-has-type */
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable no-unneeded-ternary */
+
 function timeToSeconds(timeString) {
   if (
     !timeString.includes(':') ||
